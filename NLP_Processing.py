@@ -22,3 +22,23 @@ pickle_out = open("nlpDocs.pickle","wb")
 pickle.dump(doc_bin_bytes, pickle_out)
 pickle_out.close()
 
+# Report the most common words used based on Part of Speech
+def most_common(doc, num, type):
+    if type == 'word':
+        words = [token.lemma_ for token in doc if
+                 token.is_stop != True and token.is_punct != True and token.is_space != True]
+    if type == 'noun':
+        words = [token.lemma_ for token in doc if token.is_stop != True and token.is_punct != True and token.pos_ == "NOUN"]
+    if type == 'verb':
+        words = [token.lemma_ for token in doc if token.is_stop != True and token.is_punct != True and token.pos_ == "VERB"]
+    if type == 'adjective':
+        words = [token.lemma_ for token in doc if token.is_stop != True and token.is_punct != True and token.pos_ == "ADJ"]
+    return words
+
+# Update the df with the 5 most common nouns, verbs, and adjectives of each user
+dataset['words'] = dataset['doc'].apply(lambda x: most_common(x, 5, 'word'))
+dataset['nouns'] = dataset['doc'].apply(lambda x: most_common(x, 5, 'noun'))
+dataset['verbs'] = dataset['doc'].apply(lambda x: most_common(x, 5, 'verb'))
+dataset['adjectives'] = dataset['doc'].apply(lambda x: most_common(x, 5, 'adjective'))
+dataset.drop(labels = ['doc'],axis=1, inplace = True)
+dataset.to_csv('NLP_data.csv')
