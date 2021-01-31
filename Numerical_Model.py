@@ -23,7 +23,7 @@ dataset = pd.read_csv('mbpi_dataset.csv')
 
 # Remove ||| from posts and replace them with a period. Add markers for type
 dataset['posts'] = dataset['posts'].apply(lambda x: x.replace("|||"," "))
-dataset['EI'] = dataset['type'].apply(lambda x: x[0])
+
 dataset['SN'] = dataset['type'].apply(lambda x: x[1])
 dataset['TF'] = dataset['type'].apply(lambda x: x[2])
 dataset['JP'] = dataset['type'].apply(lambda x: x[3])
